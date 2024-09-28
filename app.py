@@ -8,10 +8,10 @@ import pymongo
 from dotenv import load_dotenv
 import os
 
-
 app = Flask(__name__)
 CORS(app)
 
+# Load environment variables
 load_dotenv('.env')
 
 # Load MongoDB connection
@@ -37,7 +37,7 @@ def ai_machine():
 # Load the model and vectorizer once when the app starts
 vectorizer, clf = ai_machine()
 
-@app.route("/", methods=['POST'])
+@app.route("/", methods=['GET'])
 def get_home():
     return 'Hello World'
 
@@ -57,4 +57,5 @@ def get_contacted():
     return jsonify({"results": results}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
